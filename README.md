@@ -40,6 +40,25 @@ If you need to get the manifest file for a model for your own projects, follow t
 `huihui_ai/deepseek-r1-abliterated:8b` model:
 `https://registry.ollama.ai/v2/huihui_ai/deepseek-r1-abliterated/manifests/8b`
 
+
+## PowerShell direct downloader
+
+If you want to skip the web UI, use the script at `scripts/ollama-direct-download.ps1`.
+It fetches the manifest + all blobs and puts them directly into the correct Ollama folders.
+
+```powershell
+# Download a model directly to $env:OLLAMA_MODELS (or ~/.ollama/models when env var is not set)
+pwsh ./scripts/ollama-direct-download.ps1 gemma2:2b
+
+# Optional: override models directory and increase concurrency
+pwsh ./scripts/ollama-direct-download.ps1 llama3.2:latest -ModelsRoot "D:\ollama\models" -MaxConcurrency 12
+```
+
+Notes:
+- For non-library models, include namespace in the model ref, for example: `huihui_ai/deepseek-r1-abliterated:8b`.
+- Use `-Force` to re-download files even if they already exist.
+- Use `-SkipManifest` if you only want missing blobs.
+
 ## Downloading from Huggingface
 
 Alternatively we can download `.gguf` files from hugging face and convert them to ollama format with the following command:
