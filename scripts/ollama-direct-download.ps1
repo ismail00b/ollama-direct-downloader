@@ -188,8 +188,7 @@ try {
             Write-Host ("[{0}/{1}] Done" -f $completed, $blobEntries.Count)
         }
 
-        $jobs.Add(
-            Start-Job -ScriptBlock {
+        $job = Start-Job -ScriptBlock {
                 param($url, $path, $expectedSize)
 
                 $http = [System.Net.Http.HttpClient]::new()
@@ -229,7 +228,7 @@ try {
                     throw
                 }
             } -ArgumentList @("$blobBaseUrl/$($entry.Digest)", $outFile, $entry.Size)
-        ) | Out-Null
+        [void]$jobs.Add($job)
     }
 
     while ($jobs.Count -gt 0) {
